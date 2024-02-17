@@ -108,7 +108,7 @@ final class EmbeddedAssetCreatorV1
             convertShaderToEmbedded(
                 gltfModel, id, value, shaderIdToShader::get));
 
-        return new GltfAssetV1(outputGltf, null);
+        return new GltfAssetV1(outputGltf, null, null);
     }
 
     /**

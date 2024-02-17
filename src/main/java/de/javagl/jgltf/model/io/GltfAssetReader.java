@@ -36,6 +36,7 @@ import de.javagl.jgltf.model.GltfModel;
 import de.javagl.jgltf.model.GltfModels;
 import de.javagl.jgltf.model.io.v1.GltfAssetV1;
 import de.javagl.jgltf.model.io.v2.GltfAssetV2;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * A class for reading a glTF asset in a version-agnostic form. <br>
@@ -57,11 +58,14 @@ import de.javagl.jgltf.model.io.v2.GltfAssetV2;
  */
 public final class GltfAssetReader
 {
+
+    public ResourceLocation location;
     /**
      * Creates a new instance
      */
-    public GltfAssetReader()
+    public GltfAssetReader(ResourceLocation location)
     {
+        this.location = location;
         // Default constructor
     }
     
@@ -164,17 +168,17 @@ public final class GltfAssetReader
             int majorVersion = gltfReader.getMajorVersion();
             if (majorVersion == 1)
             {
-                de.javagl.jgltf.impl.v1.GlTF gltfV1 = 
-                    gltfReader.getAsGltfV1();
-                return new GltfAssetV1(gltfV1, 
-                    rawGltfData.getBinaryData());
+                de.javagl.jgltf.impl.v1.GlTF gltfV1 = gltfReader.getAsGltfV1();
+                GltfAssetV1 gltfAssetV1 = new GltfAssetV1(gltfV1, rawGltfData.getBinaryData(), location);
+                this.location = null;
+                return gltfAssetV1;
             }
             else if (majorVersion == 2)
             {
-                de.javagl.jgltf.impl.v2.GlTF gltfV2 = 
-                    gltfReader.getAsGltfV2();
-                return new GltfAssetV2(gltfV2, 
-                    rawGltfData.getBinaryData());
+                de.javagl.jgltf.impl.v2.GlTF gltfV2 = gltfReader.getAsGltfV2();
+                GltfAssetV2 gltfAssetV2 = new GltfAssetV2(gltfV2, rawGltfData.getBinaryData(), location);
+                this.location = null;
+                return gltfAssetV2;
             }
             else
             {

@@ -114,7 +114,7 @@ final class DefaultAssetCreatorV1
             Optionals.of(outputGltf.getShaders()).values(),
             Shader::getUri);
 
-        this.gltfAsset = new GltfAssetV1(outputGltf, null);
+        this.gltfAsset = new GltfAssetV1(outputGltf, null, null);
         
         // TODO This is not solved very elegantly, due to the 
         // transition of glTF 1.0 to glTF 2.0 - refactor this!

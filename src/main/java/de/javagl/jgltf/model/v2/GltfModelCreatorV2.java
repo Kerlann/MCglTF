@@ -134,6 +134,7 @@ public class GltfModelCreatorV2
     private static final Logger logger = 
         Logger.getLogger(GltfModelCreatorV2.class.getName());
 
+
     /**
      * Create the {@link GltfModel} for the given {@link GltfAssetV2}
      * 
@@ -143,8 +144,8 @@ public class GltfModelCreatorV2
     public static DefaultGltfModel create(GltfAssetV2 gltfAsset)
     {
         DefaultGltfModel gltfModel = new DefaultGltfModel();
-        GltfModelCreatorV2 creator = 
-            new GltfModelCreatorV2(gltfAsset, gltfModel);
+        GltfModelCreatorV2 creator = new GltfModelCreatorV2(gltfAsset, gltfModel);
+        logger.info("Kerlann: resource load :"+gltfAsset.getResourceLocation());
         creator.create();
         return gltfModel;
     }
@@ -832,7 +833,7 @@ public class GltfModelCreatorV2
             Buffer buffer = buffers.get(i);
             DefaultBufferModel bufferModel = gltfModel.getBufferModel(i);
             transferGltfChildOfRootPropertyElements(buffer, bufferModel);
-            
+
             Object extras = buffer.getExtras();
         	if(extras != null) {
         		JsonElement extra = new Gson().toJsonTree(extras).getAsJsonObject().get(MCglTF.RESOURCE_LOCATION);
@@ -865,8 +866,14 @@ public class GltfModelCreatorV2
                     }
                     else
                     {
-                        ByteBuffer bufferData = gltfAsset.getReferenceData(uri);
-                        bufferModel.setBufferData(bufferData);
+                        ResourceLocation fullResourceLocation = gltfAsset.getResourceLocation();
+                        String basePath = fullResourceLocation.getPath();
+                        int lastSlashIndex = basePath.lastIndexOf('/');
+                        basePath = basePath.substring(0, lastSlashIndex + 1);
+                        ResourceLocation test = new ResourceLocation(fullResourceLocation.getNamespace(),basePath+uri);
+                        bufferModel.setBufferData(MCglTF.getInstance().getBufferResource(test));
+                        //ByteBuffer bufferData = gltfAsset.getReferenceData(uri);
+                        //bufferModel.setBufferData(bufferData);
                     }
                 }
             }
@@ -1138,12 +1145,10 @@ public class GltfModelCreatorV2
         			continue;
         		}
         	}
-            
             Integer bufferViewIndex = image.getBufferView();
             if (bufferViewIndex != null)
             {
-                BufferViewModel bufferViewModel = 
-                    gltfModel.getBufferViewModel(bufferViewIndex);
+                BufferViewModel bufferViewModel = gltfModel.getBufferViewModel(bufferViewIndex);
                 imageModel.setBufferViewModel(bufferViewModel);
             }
             else
@@ -1157,8 +1162,15 @@ public class GltfModelCreatorV2
                 }
                 else
                 {
-                    ByteBuffer imageData = gltfAsset.getReferenceData(uri);
-                    imageModel.setImageData(imageData);
+                    if(gltfAsset.getResourceLocation() != null){
+                        ResourceLocation fullResourceLocation = gltfAsset.getResourceLocation();
+                        String basePath = fullResourceLocation.getPath();
+                        int lastSlashIndex = basePath.lastIndexOf('/');
+                        basePath = basePath.substring(0, lastSlashIndex + 1);
+                        ResourceLocation test = new ResourceLocation(fullResourceLocation.getNamespace(),basePath+uri);
+                        imageModel.setImageData(MCglTF.getInstance().getImageResource(test));
+                        logger.info("Load image : " + test.getNamespace() + " - " +test.getPath());
+                    }
                 }
             }
         }

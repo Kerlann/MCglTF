@@ -36,17 +36,21 @@ import de.javagl.jgltf.model.io.v1.GltfAssetV1;
 import de.javagl.jgltf.model.io.v2.GltfAssetV2;
 import de.javagl.jgltf.model.v1.GltfModelV1;
 import de.javagl.jgltf.model.v2.GltfModelCreatorV2;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * A class for reading a {@link GltfModel} from a URI.
  */
 public final class GltfModelReader
 {
+
+    public ResourceLocation location;
     /**
      * Default constructor
      */
-    public GltfModelReader()
+    public GltfModelReader(ResourceLocation location)
     {
+        this.location = location;
         // Default constructor
     }
     
@@ -59,7 +63,8 @@ public final class GltfModelReader
      */
     public GltfModel read(URI uri) throws IOException
     {
-        GltfAssetReader gltfAssetReader = new GltfAssetReader();
+        GltfAssetReader gltfAssetReader = new GltfAssetReader(location);
+        this.location = null;
         GltfAsset gltfAsset = gltfAssetReader.read(uri);
         return createModel(gltfAsset);
     }
@@ -73,7 +78,8 @@ public final class GltfModelReader
      */
     public GltfModel read(Path path) throws IOException
     {
-        GltfAssetReader gltfAssetReader = new GltfAssetReader();
+        GltfAssetReader gltfAssetReader = new GltfAssetReader(location);
+        this.location = null;
         GltfAsset gltfAsset = gltfAssetReader.read(path);
         return createModel(gltfAsset);
     }
@@ -114,9 +120,9 @@ public final class GltfModelReader
     public GltfModel readWithoutReferences(InputStream inputStream) 
         throws IOException
     {
-        GltfAssetReader gltfAssetReader = new GltfAssetReader();
-        GltfAsset gltfAsset = 
-            gltfAssetReader.readWithoutReferences(inputStream);
+        GltfAssetReader gltfAssetReader = new GltfAssetReader(location);
+        this.location = null;
+        GltfAsset gltfAsset = gltfAssetReader.readWithoutReferences(inputStream);
         return createModel(gltfAsset);
     }
     

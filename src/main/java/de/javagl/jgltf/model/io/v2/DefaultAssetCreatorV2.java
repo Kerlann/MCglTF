@@ -96,7 +96,7 @@ final class DefaultAssetCreatorV2
         existingBufferUriStrings = collectUriStrings(buffers, Buffer::getUri);
         existingImageUriStrings = collectUriStrings(images, Image::getUri);
 
-        this.gltfAsset = new GltfAssetV2(outputGltf, null);
+        this.gltfAsset = new GltfAssetV2(outputGltf, null, null);
         
         for (int i = 0; i < buffers.size(); i++)
         {

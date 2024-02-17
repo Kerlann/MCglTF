@@ -26,6 +26,8 @@
  */
 package de.javagl.jgltf.model.io;
 
+import net.minecraft.util.ResourceLocation;
+
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +47,8 @@ public interface GltfAsset
      * @return The glTF
      */
     Object getGltf();
+
+    ResourceLocation getResourceLocation();
     
     /**
      * Returns the binary data of this asset, or <code>null</code> if this

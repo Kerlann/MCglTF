@@ -247,7 +247,7 @@ final class BinaryAssetCreatorV1
         {
             outputGltf.setBufferViews(newBufferViews);
         }
-        return new GltfAssetV1(outputGltf, binaryGltfByteBuffer);
+        return new GltfAssetV1(outputGltf, binaryGltfByteBuffer, null);
     }
 
 

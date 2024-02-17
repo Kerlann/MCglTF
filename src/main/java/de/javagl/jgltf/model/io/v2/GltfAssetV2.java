@@ -43,6 +43,7 @@ import de.javagl.jgltf.model.io.Buffers;
 import de.javagl.jgltf.model.io.GltfAsset;
 import de.javagl.jgltf.model.io.GltfReference;
 import de.javagl.jgltf.model.io.IO;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Implementation of the {@link GltfAsset} interface for glTF 2.0.
@@ -53,6 +54,7 @@ public final class GltfAssetV2 implements GltfAsset
      * The {@link GlTF}
      */
     private final GlTF gltf;
+    private final ResourceLocation resourceLocation;
     
     /**
      * The optional binary data
@@ -70,11 +72,12 @@ public final class GltfAssetV2 implements GltfAsset
      * @param gltf The {@link GlTF}
      * @param binaryData The optional binary data
      */
-    public GltfAssetV2(GlTF gltf, ByteBuffer binaryData)
+    public GltfAssetV2(GlTF gltf, ByteBuffer binaryData, ResourceLocation location)
     {
         this.gltf = Objects.requireNonNull(gltf, "The gltf may not be null");
         this.binaryData = binaryData;
         this.referenceDatas = new ConcurrentHashMap<String, ByteBuffer>();
+        this.resourceLocation = location;
     }
     
     /**
@@ -100,7 +103,12 @@ public final class GltfAssetV2 implements GltfAsset
     {
         return gltf;
     }
-    
+
+    @Override
+    public ResourceLocation getResourceLocation() {
+        return this.resourceLocation;
+    }
+
     @Override
     public ByteBuffer getBinaryData()
     {

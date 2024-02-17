@@ -92,7 +92,7 @@ final class EmbeddedAssetCreatorV2
             convertImageToEmbedded(gltfModel, i, image);
         }
 
-        return new GltfAssetV2(outputGltf, null);
+        return new GltfAssetV2(outputGltf, null, null);
     }
 
     /**

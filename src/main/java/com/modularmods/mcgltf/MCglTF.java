@@ -212,7 +212,7 @@ public class MCglTF {
 	}
 	
 	public boolean isShaderModActive() {
-		return FMLClientHandler.instance().hasOptifine() && net.optifine.shaders.Shaders.isShaderPackInitialized;
+		return FMLClientHandler.instance().hasOptifine();
 	}
 	
 	public static MCglTF getInstance() {
@@ -311,7 +311,7 @@ public class MCglTF {
 					});
 					lookup.entrySet().parallelStream().forEach((entry) -> {
 						try(IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(entry.getKey())) {
-							entry.getValue().setLeft(new GltfModelReader().readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
+							entry.getValue().setLeft(new GltfModelReader(entry.getKey()).readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -369,7 +369,7 @@ public class MCglTF {
 					});
 					lookup.entrySet().parallelStream().forEach((entry) -> {
 						try(IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(entry.getKey())) {
-							entry.getValue().setLeft(new GltfModelReader().readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
+							entry.getValue().setLeft(new GltfModelReader(entry.getKey()).readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -427,7 +427,7 @@ public class MCglTF {
 					});
 					lookup.entrySet().parallelStream().forEach((entry) -> {
 						try(IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(entry.getKey())) {
-							entry.getValue().setLeft(new GltfModelReader().readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
+							entry.getValue().setLeft(new GltfModelReader(entry.getKey()).readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -484,7 +484,7 @@ public class MCglTF {
 					});
 					lookup.entrySet().parallelStream().forEach((entry) -> {
 						try(IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(entry.getKey())) {
-							entry.getValue().setLeft(new GltfModelReader().readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
+							entry.getValue().setLeft(new GltfModelReader(entry.getKey()).readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -539,7 +539,7 @@ public class MCglTF {
 					});
 					lookup.entrySet().parallelStream().forEach((entry) -> {
 						try(IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(entry.getKey())) {
-							entry.getValue().setLeft(new GltfModelReader().readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
+							entry.getValue().setLeft(new GltfModelReader(entry.getKey()).readWithoutReferences(new BufferedInputStream(resource.getInputStream())));
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
