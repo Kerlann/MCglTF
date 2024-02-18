@@ -1,0 +1,7 @@
+Java Launcher: C:\Users\kerla\.gradle\jdks\azul_systems__inc_-8-amd64-windows\zulu8.76.0.17-ca-jdk8.0.402-win_x64\bin\java.exe
+Arguments: '--inJar, C:\Users\kerla\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.12.2-14.23.5.2860\forge-1.12.2-14.23.5.2860-injected.jar, --outJar, C:\Users\kerla\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.12.2-14.23.5.2860_mapped_snapshot_20180814-1.12\forge-1.12.2-14.23.5.2860_mapped_snapshot_20180814-1.12.jar, --logFile, accesstransform.log, --atFile, C:\DEV\MCglTF\build\_atJar_6\parent_at.cfg'
+Classpath:
+ - C:\Users\kerla\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\accesstransformers\8.0.7\accesstransformers-8.0.7-fatjar.jar
+Working directory: C:\DEV\MCglTF\build\_atJar_6
+Main class: net.minecraftforge.accesstransformer.TransformerProcessor
+====================================

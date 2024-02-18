@@ -593,7 +593,7 @@ public class MCglTF {
 			"The AUTO means it will select maximum OpenGL version available based on your hardware. The GL43 is highest it may select.",
 			"The lower OpenGL version you set, the more negative impact on performance you will probably get.",
 			"The GL30 is a special profile which essentially the GL33 and above but replace hardware(GPU) skinning with software(CPU) skinning. This will trade a lots of CPU performance for a few GPU performance increase."})
-		public static EnumRenderedModelGLProfile RenderedModelGLProfile = EnumRenderedModelGLProfile.AUTO;
+		public static EnumRenderedModelGLProfile RenderedModelGLProfile = EnumRenderedModelGLProfile.GL20;
 	}
 
 }

@@ -26,94 +26,16 @@
  */
 package de.javagl.jgltf.model.v2;
 
-import java.nio.ByteBuffer;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.logging.Logger;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.modularmods.mcgltf.MCglTF;
-
-import de.javagl.jgltf.impl.v2.GlTFChildOfRootProperty;
-import de.javagl.jgltf.impl.v2.GlTFProperty;
-import de.javagl.jgltf.impl.v2.Asset;
-import de.javagl.jgltf.impl.v2.Accessor;
-import de.javagl.jgltf.impl.v2.AccessorSparse;
-import de.javagl.jgltf.impl.v2.AccessorSparseIndices;
-import de.javagl.jgltf.impl.v2.AccessorSparseValues;
-import de.javagl.jgltf.impl.v2.Animation;
-import de.javagl.jgltf.impl.v2.AnimationChannel;
-import de.javagl.jgltf.impl.v2.AnimationChannelTarget;
-import de.javagl.jgltf.impl.v2.AnimationSampler;
-import de.javagl.jgltf.impl.v2.Buffer;
-import de.javagl.jgltf.impl.v2.BufferView;
-import de.javagl.jgltf.impl.v2.Camera;
-import de.javagl.jgltf.impl.v2.CameraOrthographic;
-import de.javagl.jgltf.impl.v2.CameraPerspective;
-import de.javagl.jgltf.impl.v2.GlTF;
-import de.javagl.jgltf.impl.v2.Image;
-import de.javagl.jgltf.impl.v2.Material;
-import de.javagl.jgltf.impl.v2.MaterialNormalTextureInfo;
-import de.javagl.jgltf.impl.v2.MaterialOcclusionTextureInfo;
-import de.javagl.jgltf.impl.v2.MaterialPbrMetallicRoughness;
-import de.javagl.jgltf.impl.v2.Mesh;
-import de.javagl.jgltf.impl.v2.MeshPrimitive;
-import de.javagl.jgltf.impl.v2.Node;
-import de.javagl.jgltf.impl.v2.Sampler;
-import de.javagl.jgltf.impl.v2.Scene;
-import de.javagl.jgltf.impl.v2.Skin;
-import de.javagl.jgltf.impl.v2.Texture;
-import de.javagl.jgltf.impl.v2.TextureInfo;
-import de.javagl.jgltf.model.AccessorData;
-import de.javagl.jgltf.model.AccessorDatas;
-import de.javagl.jgltf.model.AccessorModel;
-import de.javagl.jgltf.model.AnimationModel;
-import de.javagl.jgltf.model.AssetModel;
+import de.javagl.jgltf.impl.v2.*;
+import de.javagl.jgltf.model.*;
 import de.javagl.jgltf.model.AnimationModel.Channel;
 import de.javagl.jgltf.model.AnimationModel.Interpolation;
-import de.javagl.jgltf.model.BufferModel;
-import de.javagl.jgltf.model.BufferViewModel;
-import de.javagl.jgltf.model.CameraModel;
-import de.javagl.jgltf.model.ElementType;
-import de.javagl.jgltf.model.ExtensionsModel;
-import de.javagl.jgltf.model.GltfConstants;
-import de.javagl.jgltf.model.GltfModel;
-import de.javagl.jgltf.model.ImageModel;
-import de.javagl.jgltf.model.MaterialModel;
-import de.javagl.jgltf.model.MeshModel;
-import de.javagl.jgltf.model.MeshPrimitiveModel;
-import de.javagl.jgltf.model.NodeModel;
-import de.javagl.jgltf.model.Optionals;
-import de.javagl.jgltf.model.SceneModel;
-import de.javagl.jgltf.model.SkinModel;
-import de.javagl.jgltf.model.TextureModel;
-import de.javagl.jgltf.model.impl.AbstractModelElement;
-import de.javagl.jgltf.model.impl.AbstractNamedModelElement;
-import de.javagl.jgltf.model.impl.DefaultAccessorModel;
-import de.javagl.jgltf.model.impl.DefaultAnimationModel;
-import de.javagl.jgltf.model.impl.DefaultAssetModel;
+import de.javagl.jgltf.model.impl.*;
 import de.javagl.jgltf.model.impl.DefaultAnimationModel.DefaultChannel;
 import de.javagl.jgltf.model.impl.DefaultAnimationModel.DefaultSampler;
-import de.javagl.jgltf.model.impl.DefaultBufferModel;
-import de.javagl.jgltf.model.impl.DefaultBufferViewModel;
-import de.javagl.jgltf.model.impl.DefaultCameraModel;
-import de.javagl.jgltf.model.impl.DefaultCameraOrthographicModel;
-import de.javagl.jgltf.model.impl.DefaultCameraPerspectiveModel;
-import de.javagl.jgltf.model.impl.DefaultExtensionsModel;
-import de.javagl.jgltf.model.impl.DefaultGltfModel;
-import de.javagl.jgltf.model.impl.DefaultImageModel;
-import de.javagl.jgltf.model.impl.DefaultMeshModel;
-import de.javagl.jgltf.model.impl.DefaultMeshPrimitiveModel;
-import de.javagl.jgltf.model.impl.DefaultNodeModel;
-import de.javagl.jgltf.model.impl.DefaultSceneModel;
-import de.javagl.jgltf.model.impl.DefaultSkinModel;
-import de.javagl.jgltf.model.impl.DefaultTextureModel;
 import de.javagl.jgltf.model.io.Buffers;
 import de.javagl.jgltf.model.io.GltfAsset;
 import de.javagl.jgltf.model.io.IO;
@@ -121,6 +43,12 @@ import de.javagl.jgltf.model.io.v2.GltfAssetV2;
 import de.javagl.jgltf.model.v2.MaterialModelV2.AlphaMode;
 import de.javagl.jgltf.model.v2.gl.Materials;
 import net.minecraft.util.ResourceLocation;
+
+import java.nio.ByteBuffer;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 /**
  * A class that is responsible for filling a {@link DefaultGltfModel} with
@@ -852,7 +780,7 @@ public class GltfModelCreatorV2
                 String uri = buffer.getUri();
                 if (IO.isDataUriString(uri))
                 {
-                    byte data[] = IO.readDataUri(uri);
+                    byte[] data = IO.readDataUri(uri);
                     ByteBuffer bufferData = Buffers.create(data);
                     bufferModel.setBufferData(bufferData);
                 }
@@ -914,13 +842,11 @@ public class GltfModelCreatorV2
             Mesh mesh = meshes.get(i);
             DefaultMeshModel meshModel = gltfModel.getMeshModel(i);
             transferGltfChildOfRootPropertyElements(mesh, meshModel);
-            
-            List<MeshPrimitive> primitives = 
-                Optionals.of(mesh.getPrimitives());
+
+            List<MeshPrimitive> primitives = Optionals.of(mesh.getPrimitives());
             for (MeshPrimitive meshPrimitive : primitives)
             {
-                MeshPrimitiveModel meshPrimitiveModel = 
-                    createMeshPrimitiveModel(meshPrimitive);
+                MeshPrimitiveModel meshPrimitiveModel = createMeshPrimitiveModel(meshPrimitive);
                 meshModel.addMeshPrimitiveModel(meshPrimitiveModel);
             }
         }
@@ -933,14 +859,10 @@ public class GltfModelCreatorV2
      * @param meshPrimitive The {@link MeshPrimitive}
      * @return The {@link MeshPrimitiveModel}
      */
-    private DefaultMeshPrimitiveModel createMeshPrimitiveModel(
-        MeshPrimitive meshPrimitive)
+    private DefaultMeshPrimitiveModel createMeshPrimitiveModel(MeshPrimitive meshPrimitive)
     {
-        Integer mode = Optionals.of(
-            meshPrimitive.getMode(), 
-            meshPrimitive.defaultMode());
-        DefaultMeshPrimitiveModel meshPrimitiveModel = 
-            new DefaultMeshPrimitiveModel(mode);
+        Integer mode = Optionals.of(meshPrimitive.getMode(), meshPrimitive.defaultMode());
+        DefaultMeshPrimitiveModel meshPrimitiveModel = new DefaultMeshPrimitiveModel(mode);
         transferGltfPropertyElements(meshPrimitive, meshPrimitiveModel);
         
         Integer indicesIndex = meshPrimitive.getIndices();
@@ -949,40 +871,33 @@ public class GltfModelCreatorV2
             AccessorModel indices = gltfModel.getAccessorModel(indicesIndex);
             meshPrimitiveModel.setIndices(indices);
         }
-        Map<String, Integer> attributes = 
-            Optionals.of(meshPrimitive.getAttributes());
+        Map<String, Integer> attributes = Optionals.of(meshPrimitive.getAttributes());
         for (Entry<String, Integer> entry : attributes.entrySet())
         {
             String attributeName = entry.getKey();
             int attributeIndex = entry.getValue();
-            AccessorModel attribute = 
-                gltfModel.getAccessorModel(attributeIndex);
+            AccessorModel attribute = gltfModel.getAccessorModel(attributeIndex);
             meshPrimitiveModel.putAttribute(attributeName, attribute);
         }
-        
-        List<Map<String, Integer>> morphTargets =
-            Optionals.of(meshPrimitive.getTargets());
+
+        List<Map<String, Integer>> morphTargets = Optionals.of(meshPrimitive.getTargets());
         for (Map<String, Integer> morphTarget : morphTargets)
         {
-            Map<String, AccessorModel> morphTargetModel = 
-                new LinkedHashMap<String, AccessorModel>();
+            Map<String, AccessorModel> morphTargetModel = new LinkedHashMap<String, AccessorModel>();
             for (Entry<String, Integer> entry : morphTarget.entrySet())
             {
                 String attribute = entry.getKey();
                 Integer accessorIndex = entry.getValue();
-                AccessorModel accessorModel = 
-                    gltfModel.getAccessorModel(accessorIndex);
+                AccessorModel accessorModel = gltfModel.getAccessorModel(accessorIndex);
                 morphTargetModel.put(attribute, accessorModel);
             }
-            meshPrimitiveModel.addTarget(
-                Collections.unmodifiableMap(morphTargetModel));
+            meshPrimitiveModel.addTarget(Collections.unmodifiableMap(morphTargetModel));
         }
         
         Integer materialIndex = meshPrimitive.getMaterial();
         if (materialIndex != null)
         {
-            MaterialModelV2 materialModel = 
-                (MaterialModelV2) gltfModel.getMaterialModel(materialIndex);
+            MaterialModelV2 materialModel = (MaterialModelV2) gltfModel.getMaterialModel(materialIndex);
             meshPrimitiveModel.setMaterialModel(materialModel);
         }
         
@@ -1029,11 +944,11 @@ public class GltfModelCreatorV2
                 CameraModel cameraModel = gltfModel.getCameraModel(cameraIndex);
                 nodeModel.setCameraModel(cameraModel);
             }
-            
-            float matrix[] = node.getMatrix();
-            float translation[] = node.getTranslation();
-            float rotation[] = node.getRotation();
-            float scale[] = node.getScale();
+
+            float[] matrix = node.getMatrix();
+            float[] translation = node.getTranslation();
+            float[] rotation = node.getRotation();
+            float[] scale = node.getScale();
             nodeModel.setMatrix(Optionals.clone(matrix));
             nodeModel.setTranslation(Optionals.clone(translation));
             nodeModel.setRotation(Optionals.clone(rotation));
@@ -1042,7 +957,7 @@ public class GltfModelCreatorV2
             List<Float> weights = node.getWeights();
             if (weights != null)
             {
-                float weightsArray[] = new float[weights.size()];
+                float[] weightsArray = new float[weights.size()];
                 for (int j = 0; j < weights.size(); j++)
                 {
                     weightsArray[j] = weights.get(j);
@@ -1156,7 +1071,7 @@ public class GltfModelCreatorV2
                 String uri = image.getUri();
                 if (IO.isDataUriString(uri))
                 {
-                    byte data[] = IO.readDataUri(uri);
+                    byte[] data = IO.readDataUri(uri);
                     ByteBuffer imageData = Buffers.create(data);
                     imageModel.setImageData(imageData);
                 }
@@ -1185,8 +1100,7 @@ public class GltfModelCreatorV2
         for (int i = 0; i < materials.size(); i++)
         {
             Material material = materials.get(i);
-            MaterialModelV2 materialModel = 
-                (MaterialModelV2) gltfModel.getMaterialModel(i);
+            MaterialModelV2 materialModel = (MaterialModelV2) gltfModel.getMaterialModel(i);
             
             transferGltfChildOfRootPropertyElements(material, materialModel);            
             initMaterialModel(materialModel, material);
@@ -1203,12 +1117,10 @@ public class GltfModelCreatorV2
     private void initMaterialModel(
         MaterialModelV2 materialModel, Material material)
     {
-        MaterialPbrMetallicRoughness pbrMetallicRoughness = 
-            material.getPbrMetallicRoughness();
+        MaterialPbrMetallicRoughness pbrMetallicRoughness = material.getPbrMetallicRoughness();
         if (pbrMetallicRoughness == null)
         {
-            pbrMetallicRoughness = 
-                Materials.createDefaultMaterialPbrMetallicRoughness();
+            pbrMetallicRoughness = Materials.createDefaultMaterialPbrMetallicRoughness();
         }
         
         String alphaModeString = material.getAlphaMode();
@@ -1216,93 +1128,69 @@ public class GltfModelCreatorV2
         {
             materialModel.setAlphaMode(AlphaMode.valueOf(alphaModeString));
         }
-        materialModel.setAlphaCutoff(
-            Optionals.of(material.getAlphaCutoff(), 0.5f));
+        materialModel.setAlphaCutoff(Optionals.of(material.getAlphaCutoff(), 0.5f));
         
-        materialModel.setDoubleSided(
-            Boolean.TRUE.equals(material.isDoubleSided()));
+        materialModel.setDoubleSided(Boolean.TRUE.equals(material.isDoubleSided()));
         
-        TextureInfo baseColorTextureInfo = 
-            pbrMetallicRoughness.getBaseColorTexture();
+        TextureInfo baseColorTextureInfo = pbrMetallicRoughness.getBaseColorTexture();
         if (baseColorTextureInfo != null)
         {
             int index = baseColorTextureInfo.getIndex();
             TextureModel textureModel = gltfModel.getTextureModel(index);
             materialModel.setBaseColorTexture(textureModel);
-            materialModel.setBaseColorTexcoord(
-                baseColorTextureInfo.getTexCoord());
+            materialModel.setBaseColorTexcoord(baseColorTextureInfo.getTexCoord());
         }
-        float[] baseColorFactor = Optionals.of(
-            pbrMetallicRoughness.getBaseColorFactor(),
-            pbrMetallicRoughness.defaultBaseColorFactor());
+        float[] baseColorFactor = Optionals.of(pbrMetallicRoughness.getBaseColorFactor(), pbrMetallicRoughness.defaultBaseColorFactor());
         materialModel.setBaseColorFactor(baseColorFactor);
         
-        TextureInfo metallicRoughnessTextureInfo = 
-            pbrMetallicRoughness.getMetallicRoughnessTexture();
+        TextureInfo metallicRoughnessTextureInfo = pbrMetallicRoughness.getMetallicRoughnessTexture();
         if (metallicRoughnessTextureInfo != null)
         {
             int index = metallicRoughnessTextureInfo.getIndex();
             TextureModel textureModel = gltfModel.getTextureModel(index);
             materialModel.setMetallicRoughnessTexture(textureModel);
-            materialModel.setMetallicRoughnessTexcoord(
-                metallicRoughnessTextureInfo.getTexCoord());
+            materialModel.setMetallicRoughnessTexcoord(metallicRoughnessTextureInfo.getTexCoord());
         }
-        float metallicFactor = Optionals.of(
-            pbrMetallicRoughness.getMetallicFactor(),
-            pbrMetallicRoughness.defaultMetallicFactor());
+        float metallicFactor = Optionals.of(pbrMetallicRoughness.getMetallicFactor(), pbrMetallicRoughness.defaultMetallicFactor());
         materialModel.setMetallicFactor(metallicFactor);
         
-        float roughnessFactor = Optionals.of(
-            pbrMetallicRoughness.getRoughnessFactor(),
-            pbrMetallicRoughness.defaultRoughnessFactor());
+        float roughnessFactor = Optionals.of(pbrMetallicRoughness.getRoughnessFactor(), pbrMetallicRoughness.defaultRoughnessFactor());
         materialModel.setRoughnessFactor(roughnessFactor);
         
-        MaterialNormalTextureInfo normalTextureInfo = 
-            material.getNormalTexture();
+        MaterialNormalTextureInfo normalTextureInfo = material.getNormalTexture();
         if (normalTextureInfo != null)
         {
             int index = normalTextureInfo.getIndex();
             TextureModel textureModel = gltfModel.getTextureModel(index);
             materialModel.setNormalTexture(textureModel);
-            materialModel.setNormalTexcoord(
-                normalTextureInfo.getTexCoord());
+            materialModel.setNormalTexcoord(normalTextureInfo.getTexCoord());
             
-            float normalScale = Optionals.of(
-                normalTextureInfo.getScale(),
-                normalTextureInfo.defaultScale());
+            float normalScale = Optionals.of(normalTextureInfo.getScale(), normalTextureInfo.defaultScale());
             materialModel.setNormalScale(normalScale);
         }
 
-        MaterialOcclusionTextureInfo occlusionTextureInfo = 
-            material.getOcclusionTexture();
+        MaterialOcclusionTextureInfo occlusionTextureInfo = material.getOcclusionTexture();
         if (occlusionTextureInfo != null)
         {
             int index = occlusionTextureInfo.getIndex();
             TextureModel textureModel = gltfModel.getTextureModel(index);
             materialModel.setOcclusionTexture(textureModel);
-            materialModel.setOcclusionTexcoord(
-                occlusionTextureInfo.getTexCoord());
+            materialModel.setOcclusionTexcoord(occlusionTextureInfo.getTexCoord());
             
-            float occlusionStrength = Optionals.of(
-                occlusionTextureInfo.getStrength(),
-                occlusionTextureInfo.defaultStrength());
+            float occlusionStrength = Optionals.of(occlusionTextureInfo.getStrength(), occlusionTextureInfo.defaultStrength());
             materialModel.setOcclusionStrength(occlusionStrength);
         }
 
-        TextureInfo emissiveTextureInfo = 
-            material.getEmissiveTexture();
+        TextureInfo emissiveTextureInfo = material.getEmissiveTexture();
         if (emissiveTextureInfo != null)
         {
             int index = emissiveTextureInfo.getIndex();
             TextureModel textureModel = gltfModel.getTextureModel(index);
             materialModel.setEmissiveTexture(textureModel);
-            materialModel.setEmissiveTexcoord(
-                emissiveTextureInfo.getTexCoord());
+            materialModel.setEmissiveTexcoord(emissiveTextureInfo.getTexCoord());
         }
         
-        float[] emissiveFactor = Optionals.of(
-            material.getEmissiveFactor(),
-            material.defaultEmissiveFactor());
+        float[] emissiveFactor = Optionals.of(material.getEmissiveFactor(), material.defaultEmissiveFactor());
         materialModel.setEmissiveFactor(emissiveFactor);
     }
     

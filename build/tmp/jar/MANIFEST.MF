@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: MCglTF
+Implementation-Version: 1.12.2-Forge-2.0.3.0
+Specification-Vendor: ModularMods
+Specification-Title: MCglTF
+Implementation-Timestamp: 2024-02-17T11:35:23+0100
+Specification-Version: 1
+Implementation-Vendor: TimLee9024
+

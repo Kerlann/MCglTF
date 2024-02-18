@@ -761,31 +761,25 @@ public class GltfCreatorV2
 
         meshPrimitive.setMode(meshPrimitiveModel.getMode());
         
-        Map<String, Integer> attributes = resolveIndices(
-            meshPrimitiveModel.getAttributes(), 
-            accessorIndices::get);
+        Map<String, Integer> attributes = resolveIndices(meshPrimitiveModel.getAttributes(), accessorIndices::get);
         meshPrimitive.setAttributes(attributes);
 
         AccessorModel indices = meshPrimitiveModel.getIndices();
         meshPrimitive.setIndices(accessorIndices.get(indices));
         
-        List<Map<String, AccessorModel>> modelTargetsList = 
-            meshPrimitiveModel.getTargets();
+        List<Map<String, AccessorModel>> modelTargetsList = meshPrimitiveModel.getTargets();
         if (!modelTargetsList.isEmpty())
         {
-            List<Map<String, Integer>> targetsList = 
-                new ArrayList<Map<String, Integer>>();
+            List<Map<String, Integer>> targetsList = new ArrayList<Map<String, Integer>>();
             for (Map<String, AccessorModel> modelTargets : modelTargetsList)
             {
-                Map<String, Integer> targets = resolveIndices(
-                    modelTargets, accessorIndices::get);
+                Map<String, Integer> targets = resolveIndices(modelTargets, accessorIndices::get);
                 targetsList.add(targets);
             }
             meshPrimitive.setTargets(targetsList);
         }
         
-        Integer material = materialIndices.get(
-            meshPrimitiveModel.getMaterialModel());
+        Integer material = materialIndices.get(meshPrimitiveModel.getMaterialModel());
         meshPrimitive.setMaterial(material);
         
         return meshPrimitive;
@@ -849,8 +843,7 @@ public class GltfCreatorV2
         Scene scene = new Scene();
         transferGltfChildOfRootPropertyElements(sceneModel, scene);
         
-        scene.setNodes(map(
-            sceneModel.getNodeModels(), nodeIndices::get));
+        scene.setNodes(map(sceneModel.getNodeModels(), nodeIndices::get));
         return scene;
     }
     
@@ -865,12 +858,10 @@ public class GltfCreatorV2
         Skin skin = new Skin();
         transferGltfChildOfRootPropertyElements(skinModel, skin);
         
-        Integer inverseBindMatrices = 
-            accessorIndices.get(skinModel.getInverseBindMatrices());
+        Integer inverseBindMatrices = accessorIndices.get(skinModel.getInverseBindMatrices());
         skin.setInverseBindMatrices(inverseBindMatrices);
         
-        skin.setJoints(map(
-            skinModel.getJoints(), nodeIndices::get));
+        skin.setJoints(map(skinModel.getJoints(), nodeIndices::get));
         
         Integer skeleton = nodeIndices.get(skinModel.getSkeleton());
         skin.setSkeleton(skeleton);
@@ -889,8 +880,7 @@ public class GltfCreatorV2
     private Map<SamplerInfo, Integer> createSamplerIndices(
         List<TextureModel> textureModels)
     {
-        Map<SamplerInfo, Integer> samplerIndices = 
-            new LinkedHashMap<SamplerInfo, Integer>();
+        Map<SamplerInfo, Integer> samplerIndices = new LinkedHashMap<SamplerInfo, Integer>();
         for (TextureModel textureModel : textureModels)
         {
             SamplerInfo samplerInfo = new SamplerInfo(textureModel);

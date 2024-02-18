@@ -329,16 +329,15 @@ public class RenderedGltfModel {
 					if(materialModel != null) {
 						Object extras = materialModel.getExtras();
 						if(extras != null) {
+							System.out.println(extras);
 							Material renderedMaterial = obtainMaterial(gltfRenderData, extras);
 							vanillaRenderCommands.add(renderedMaterial.vanillaMaterialCommand);
 							shaderModRenderCommands.add(renderedMaterial.shaderModMaterialCommand);
-						}
-						else {
+						} else {
 							vanillaRenderCommands.add(vanillaDefaultMaterialCommand);
 							shaderModRenderCommands.add(shaderModDefaultMaterialCommand);
 						}
-					}
-					else {
+					} else {
 						vanillaRenderCommands.add(vanillaDefaultMaterialCommand);
 						shaderModRenderCommands.add(shaderModDefaultMaterialCommand);
 					}

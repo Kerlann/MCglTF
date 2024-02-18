@@ -36,8 +36,7 @@ import de.javagl.jgltf.model.impl.AbstractNamedModelElement;
  * Note: This class might be renamed to "PbrBasedMaterialModel" and moved to 
  * a different package in the future.
  */
-public final class MaterialModelV2 extends AbstractNamedModelElement
-    implements MaterialModel
+public final class MaterialModelV2 extends AbstractNamedModelElement implements MaterialModel
 {
     /**
      * Alpha modes
